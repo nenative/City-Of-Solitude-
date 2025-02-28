@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Storefront</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include the NEAR JavaScript SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/near-api-js/0.41.0/near-api-js.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>NFT Storefront</h1>
+        <p>Purchase an exclusive audio file as an NFT.</p>
+        <button id="loginButton">Login with NEAR</button>
+        <button id="purchaseButton">Purchase NFT</button>
+        <p id="walletStatus">Not logged in</p>
+
+        <!-- Profile section -->
+        <div class="profile">
+            <h2>Profile</h2>
+            <p><strong>Name:</strong> <span id="profileName"></span></p>
+            <p><strong>Bio:</strong> <span id="profileBio"></span></p>
+            <p><strong>NFTs:</strong> <span id="profileNFTs"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize NEAR connection
+        async function initNEAR() {
+            const nearConfig = {
+                networkId: "testnet",
+                nodeUrl: "https://rpc.testnet.near.org",
+                walletUrl: "https://wallet.testnet.near.org",
+                helperUrl: "https://helper.testnet.near.org",
+                explorerUrl: "https://explorer.testnet.near.org",
+            };
+
+            // Connect to NEAR
+            const near = await nearApi.connect({
+                deps: { keyStore: new nearApi.keyStores.BrowserLocalStorageKeyStore() },
+                ...nearConfig,
+            });
+
+            // Initialize wallet connection
+            const wallet = new nearApi.WalletConnection(near);
+
+            // Check if user is logged in
+            if (wallet.isSignedIn()) {
+                document.getElementById("walletStatus").innerText = `Logged in as: ${wallet.getAccountId()}`;
+                displayUserProfile(wallet.getAccountId());
+            } else {
+                document.getElementById("walletStatus").innerText = "Not logged in";
+            }
+
+            // Add event listener to login button
+            document.getElementById("loginButton").addEventListener("click", () => {
+                wallet.requestSignIn();
+            });
+
+            // Add event listener to purchase button
+            document.getElementById("purchaseButton").addEventListener("click", async () => {
+                if (!wallet.isSignedIn()) {
+                    alert("Please log in to purchase.");
+                    return;
+                }
+
+                // Call the smart contract to mint the NFT
+                const contract = new nearApi.Contract(wallet.account(), "your-contract-account.testnet", {
+                    viewMethods: ["getNFT", "getUserProfile"],
+                    changeMethods: ["mintNFT", "transferNFT", "updateUserProfile"],
+                });
+
+                try {
+                    await contract.mintNFT({
+                        id: "unique-nft-id",
+                        metadata: "Audio file metadata",
+                    }, "1000000000000000000000000"); // 1 NEAR deposit
+
+                    alert("NFT Minted Successfully!");
+                    displayUserProfile(wallet.getAccountId());
+                } catch (error) {
+                    console.error("Error minting NFT:", error);
+                    alert("Failed to mint NFT.");
+                }
+            });
+        }
+
+        // Function to display user profile
+        async function displayUserProfile(accountId) {
+            const contract = new nearApi.Contract(wallet.account(), "your-contract-account.testnet", {
+                viewMethods: ["getUserProfile"],
+                changeMethods: [],
+            });
+
+            try {
+                const profile = await contract.getUserProfile({ accountId });
+                if (profile) {
+                    document.getElementById("profileName").innerText = profile.name;
+                    document.getElementById("profileBio").innerText = profile.bio;
+                    document.getElementById("profileNFTs").innerText = profile.nfts.map(nft => nft.id).join(", ");
+                } else {
+                    document.getElementById("profileName").innerText = "No profile found";
+                    document.getElementById("profileBio").innerText = "";
+                    document.getElementById("profileNFTs").innerText = "";
+                }
