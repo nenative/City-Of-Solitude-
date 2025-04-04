@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of Solitude</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Echoes of Solitude</h1>
+        <p>A futuristic Broadway musical exploring loneliness in NYC.</p>
+    </header>
+    <main>
+        <section id="about">
+            <h2>About the Show</h2>
+            <p>Step into a world where the echoes of the city tell stories of solitude and connection.</p>
+        </section>
+        <section id="nft-store">
+            <h2>Own a Piece of the Music</h2>
+            <p>Get exclusive access to the show's journey by owning the first digital collectible - a sneak peek of the opening song.</p>
+            <a href="nft-store.html">Visit the NFT Storefront</a>
+        </section>
+    </main>
+    <footer>
+        <p>Powered by NEAR | Follow the journey</p>
+    </footer>
+</body>
+</html>
