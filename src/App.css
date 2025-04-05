@@ -1,0 +1,127 @@
+.App {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #000000 0%, #1a1a2e 100%);
+  color: #ffffff;
+}
+
+.cyber-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0, 255, 242, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 242, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 1;
+  pointer-events: none;
+  animation: gridFloat 20s linear infinite;
+}
+
+.glass-container {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+.artist-section {
+  background: rgba(0, 255, 242, 0.05);
+  border: 1px solid rgba(0, 255, 242, 0.2);
+  transition: all 0.3s ease;
+}
+
+.artist-section:hover {
+  background: rgba(0, 255, 242, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 255, 242, 0.15);
+}
+
+.feature-text {
+  color: #00fff2;
+  text-shadow: 0 0 10px rgba(0, 255, 242, 0.3);
+}
+
+.success-message {
+  background: rgba(0, 255, 242, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 242, 0.3);
+}
+
+.preview-text {
+  color: #00fff2;
+  font-style: italic;
+}
+
+@keyframes gridFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .glass-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+}
+
+/* Loading Animation */
+.loading-spinner {
+  border: 4px solid rgba(0, 255, 242, 0.1);
+  border-left-color: #00fff2;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button Hover Effects */
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(0, 255, 242, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+button:hover::after {
+  opacity: 1;
+  transform: rotate(45deg) translate(50%, 50%);
+} 
